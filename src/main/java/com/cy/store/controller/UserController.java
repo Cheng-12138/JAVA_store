@@ -20,6 +20,13 @@ public class UserController extends BaseController {
         userService.reg(user);
         return new JsonResult<Void>(OK);
     }
+    @RequestMapping("login")
+    public JsonResult<User> login(String username, String password) {
+        //调用业务对象的方法执行登录，并获取返回值
+        User data = userService.login(username,password);
+        //将以上返回值和状态码OK封装到响应结果中并返回
+        return new JsonResult<User>(OK, data);
+    }
 
 //    @RequestMapping("reg")
 //    public JsonResult<Void> reg(User user) {
