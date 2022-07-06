@@ -69,4 +69,39 @@ public class UserServiceImpl implements IUserService {
         }
         return password;
     }
+
+    @Override
+    public User login(String username, String password){
+        //调用findByUsername()方法，根据参数查询username
+        User result = userMapper.findByUsername(username);
+        //判断输出结果是否为null
+        if (result == null){
+            //是：抛出UserNotFoundException异常
+            throw new UserNotFoundException("用户数据不存在的错误");
+        }
+        //判断用户名是否已经删除
+        if (result.getIsDelete() == 1){
+            //是：抛出UserNotFoundException异常
+            throw new UserNotFoundException("用户数据已经删除的异常");
+        }
+
+        //从查询结果中获取盐值
+        String salt = result.getSalt();
+        //调用getMd5Password()方法，将参数password和salt结合起来进行查询
+        String md5Password = getMd5Password(password, salt);
+        //判断查询结果中的密码，于以上的的到的密码是否不一致
+        if (!result.getPassword().equals(md5Password)){
+            //是：抛出PasswordNotMatchException异常
+            throw new PasswordNotMatchException("密码错误");
+        }
+
+        //创建新的User对象
+        User user = new User();
+        //将查询结果中的uid、username、avatar封装到新的user对象中
+        user.setUid(result.getUid());
+        user.setUsername(result.getUsername());
+        user.setAvatar(result.getAvatar());
+        //返回新的对象
+        return user;
+    }
 }

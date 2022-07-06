@@ -1,6 +1,7 @@
 package com.cy.store.service;
 
 import com.cy.store.entity.User;
+import com.cy.store.service.ex.ServiceException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,18 @@ public class UserServiceTests {
             System.out.println("注册成功！");
         }catch (SecurityException e){
             System.out.println("注册失败！" + e.getClass().getSimpleName());
+            System.out.println(e.getMessage());
+        }
+    }
+    @Test
+    public void login() {
+        try {
+            String username = "lower";
+            String password = "123456";
+            User user = iUserService.login(username, password);
+            System.out.println("登录成功！" + user);
+        } catch (ServiceException e) {
+            System.out.println("登录失败！" + e.getClass().getSimpleName());
             System.out.println(e.getMessage());
         }
     }
