@@ -6,8 +6,11 @@ import com.cy.store.service.ex.InsertException;
 import com.cy.store.service.ex.UsernameDuplicateException;
 import com.cy.store.util.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.HttpSessionRequiredException;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("users")
@@ -21,10 +24,13 @@ public class UserController extends BaseController {
         return new JsonResult<Void>(OK);
     }
     @RequestMapping("login")
-    public JsonResult<User> login(String username, String password) {
+    public JsonResult<User> login(String username, String password, HttpSession session) {
         //调用业务对象的方法执行登录，并获取返回值
         User data = userService.login(username,password);
         //将以上返回值和状态码OK封装到响应结果中并返回
+        //登陆成功后，将uid和username存入到HttpSession中
+        session.setAttribute("uid", data.getUid());
+        session.setAttribute("username", data.getUsername());
         return new JsonResult<User>(OK, data);
     }
 

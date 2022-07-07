@@ -19,7 +19,7 @@ public class UserNotFoundException extends ServiceException{
         super(cause);
     }
 
-    public UserNotFoundException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace){
+    protected UserNotFoundException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace){
         super(message, cause, enableSuppression, writableStackTrace);
     }
 }

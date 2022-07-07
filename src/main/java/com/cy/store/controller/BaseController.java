@@ -1,10 +1,10 @@
 package com.cy.store.controller;
 
-import com.cy.store.entity.User;
 import com.cy.store.service.ex.*;
 import com.cy.store.util.JsonResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.yaml.snakeyaml.serializer.SerializerException;
+
+import javax.servlet.http.HttpSession;
 
 /*控制类的基类*/
 public class BaseController {
@@ -20,9 +20,26 @@ public class BaseController {
             result.setState(4001);
         }else if (e instanceof PasswordNotMatchException) {
             result.setState(4002);
-        } else if(e instanceof InsertException){
+        }else if(e instanceof InsertException){
             result.setState(5000);
         }
         return result;
+    }
+
+    /*
+    * 从HttpSession对象中获取uid
+    * @param session HttpSession对象
+    * @return 当前登录的用户id
+    */
+    protected final Integer getUidFromSession(HttpSession session) {
+        return Integer.valueOf(session.getAttribute("uid").toString());
+    }
+    /*
+     * 从HttpSession对象中获取用户名
+     * @param session HttpSession对象
+     * @return 当前登录的用户名
+     */
+    protected final String getUsernameFromSession(HttpSession session) {
+        return session.getAttribute("username").toString();
     }
 }
